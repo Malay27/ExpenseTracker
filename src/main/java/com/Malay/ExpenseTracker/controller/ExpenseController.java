@@ -44,4 +44,27 @@ public class ExpenseController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Somethings went wrong");
         }
     }
+
+    @PutMapping("/{id}")
+    private ResponseEntity<?> updateExpense(@PathVariable Long id, @RequestBody ExpenseDTO expenseDTO){
+        try{
+            return ResponseEntity.ok(expenseService.updateExpense(id,expenseDTO));
+        }catch(EntityNotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Somethings went wrong");
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    private ResponseEntity<?> deleteExpense(@PathVariable Long id){
+        try{
+            expenseService.deleteExpense(id);
+            return ResponseEntity.ok(null);
+        }catch(EntityNotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Somethings went wrong");
+        }
+    }
 }
