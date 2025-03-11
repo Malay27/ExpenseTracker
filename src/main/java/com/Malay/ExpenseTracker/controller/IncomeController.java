@@ -4,6 +4,7 @@ package com.Malay.ExpenseTracker.controller;
 import com.Malay.ExpenseTracker.dto.IncomeDTO;
 import com.Malay.ExpenseTracker.entity.Income;
 import com.Malay.ExpenseTracker.services.income.IncomeService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +31,39 @@ public class IncomeController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllIncomes(){
         return ResponseEntity.ok(incomeService.getAllIncomes());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateIncome(@PathVariable Long id, @RequestBody IncomeDTO incomeDTO){
+        try{
+            return ResponseEntity.ok(incomeService.updateIncome(id,incomeDTO));
+        }catch (EntityNotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong");
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getIncomeById(@PathVariable Long id){
+        try{
+            return ResponseEntity.ok(incomeService.getIncomeById(id));
+        }catch (EntityNotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong");
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteIncomeById(@PathVariable Long id){
+        try{
+            incomeService.deleteIncomeById(id);
+            return ResponseEntity.ok(null);
+        }catch (EntityNotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong");
+        }
     }
 }
