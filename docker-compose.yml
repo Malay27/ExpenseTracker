@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  app:
+    image: expense-tracker-app
+    build:
+      context: .
+    ports:
+      - "8080:8080"
